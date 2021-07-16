@@ -42,6 +42,41 @@ public class BaseSteps {
         );
     }
 
+    @When("get request is made for comments endpoint")
+    public void getAllComments() {
+        requestMaker.makeGetRequest(
+                url + configurationLoader.getPropertyValue("resourceComments")
+        );
+    }
+
+    @When("get request is made for albums endpoint")
+    public void getAllAlbums() {
+        requestMaker.makeGetRequest(
+                url + configurationLoader.getPropertyValue("resourceAlbums")
+        );
+    }
+
+    @When("get request is made for photos endpoint")
+    public void getAllPhotos() {
+        requestMaker.makeGetRequest(
+                url + configurationLoader.getPropertyValue("resourcePhotos")
+        );
+    }
+
+    @When("get request is made for todos endpoint")
+    public void getAllTodos() {
+        requestMaker.makeGetRequest(
+                url + configurationLoader.getPropertyValue("resourceTodos")
+        );
+    }
+
+    @When("get request is made for users endpoint")
+    public void getAllUsers() {
+        requestMaker.makeGetRequest(
+                url + configurationLoader.getPropertyValue("resourceUsers")
+        );
+    }
+
     @Then("there should be {int} records in response")
     public void recordCountInResponse(Integer size) {
         assertThat(
@@ -49,10 +84,40 @@ public class BaseSteps {
                 is(size));
     }
 
-    @Then("should follow the schema")
+    @Then("should follow the schema for posts")
     public void validatePostsSchema() {
         then().assertThat()
                 .body(matchesJsonSchemaInClasspath("jsonSchema/postsSchema.json"));
+    }
+
+    @Then("should follow the schema for comments")
+    public void validateCommentsSchema() {
+        then().assertThat()
+                .body(matchesJsonSchemaInClasspath("jsonSchema/commentsSchema.json"));
+    }
+
+    @Then("should follow the schema for albums")
+    public void validateAlbumsSchema() {
+        then().assertThat()
+                .body(matchesJsonSchemaInClasspath("jsonSchema/albumsSchema.json"));
+    }
+
+    @Then("should follow the schema for photos")
+    public void validatePhotosSchema() {
+        then().assertThat()
+                .body(matchesJsonSchemaInClasspath("jsonSchema/photosSchema.json"));
+    }
+
+    @Then("should follow the schema for todos")
+    public void validateTodosSchema() {
+        then().assertThat()
+                .body(matchesJsonSchemaInClasspath("jsonSchema/todosSchema.json"));
+    }
+
+    @Then("should follow the schema for users")
+    public void validateUsersSchema() {
+        then().assertThat()
+                .body(matchesJsonSchemaInClasspath("jsonSchema/usersSchema.json"));
     }
 
 }
