@@ -18,7 +18,7 @@ jobs:
           name: Test
           command: mvn clean verify
       - store_artifacts:
-                path: /target/site/serenity
+                path: ~/target/site/serenity
 
 workflows:
   # Below is the definition of your workflow.
