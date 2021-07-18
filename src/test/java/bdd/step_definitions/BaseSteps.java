@@ -4,10 +4,14 @@ import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.restassured.response.Response;
 import net.thucydides.core.annotations.Steps;
 import utils.ConfigurationLoader;
 import utils.RequestMaker;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static net.serenitybdd.rest.SerenityRest.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
@@ -17,6 +21,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class BaseSteps {
 
     public static String url;
+    public static Map<String, String> resourceSchemaMap = Stream.of(new Object[][] {
+            { "albums", "albumsSchema.json" },
+            { "comments", "commentsSchema.json" },
+            { "photos", "photosSchema.json" },
+            { "posts", "postsSchema.json" },
+            { "todos", "todosSchema.json" },
+            { "users", "usersSchema.json" }
+    }).collect(Collectors.toMap(data -> (String) data[0], data -> (String) data[1]));
 
     @Steps
     RequestMaker requestMaker;
@@ -35,46 +47,16 @@ public class BaseSteps {
         url = configurationLoader.getPropertyValue("baseURL");
     }
 
-    @When("get request is made for posts endpoint")
-    public void getAllPosts() {
+    @When("get request is made for {string} endpoint")
+    public void getAllRecordsForResource(String resourceName) {
         requestMaker.makeGetRequest(
-                url + configurationLoader.getPropertyValue("resourcePosts")
+                url + configurationLoader.getPropertyValue(resourceName)
         );
     }
 
-    @When("get request is made for comments endpoint")
-    public void getAllComments() {
-        requestMaker.makeGetRequest(
-                url + configurationLoader.getPropertyValue("resourceComments")
-        );
-    }
-
-    @When("get request is made for albums endpoint")
-    public void getAllAlbums() {
-        requestMaker.makeGetRequest(
-                url + configurationLoader.getPropertyValue("resourceAlbums")
-        );
-    }
-
-    @When("get request is made for photos endpoint")
-    public void getAllPhotos() {
-        requestMaker.makeGetRequest(
-                url + configurationLoader.getPropertyValue("resourcePhotos")
-        );
-    }
-
-    @When("get request is made for todos endpoint")
-    public void getAllTodos() {
-        requestMaker.makeGetRequest(
-                url + configurationLoader.getPropertyValue("resourceTodos")
-        );
-    }
-
-    @When("get request is made for users endpoint")
-    public void getAllUsers() {
-        requestMaker.makeGetRequest(
-                url + configurationLoader.getPropertyValue("resourceUsers")
-        );
+    @Then("response code should be {int}")
+    public void assertResponseCode(Integer responseCode) {
+        restAssuredThat(response -> response.statusCode(responseCode));
     }
 
     @Then("there should be {int} records in response")
@@ -84,40 +66,9 @@ public class BaseSteps {
                 is(size));
     }
 
-    @Then("should follow the schema for posts")
-    public void validatePostsSchema() {
+    @Then("should follow the schema for {string}")
+    public void validateSchema(String resourceName) {
         then().assertThat()
-                .body(matchesJsonSchemaInClasspath("jsonSchema/postsSchema.json"));
+                .body(matchesJsonSchemaInClasspath("jsonSchema/" + resourceSchemaMap.get(resourceName)));
     }
-
-    @Then("should follow the schema for comments")
-    public void validateCommentsSchema() {
-        then().assertThat()
-                .body(matchesJsonSchemaInClasspath("jsonSchema/commentsSchema.json"));
-    }
-
-    @Then("should follow the schema for albums")
-    public void validateAlbumsSchema() {
-        then().assertThat()
-                .body(matchesJsonSchemaInClasspath("jsonSchema/albumsSchema.json"));
-    }
-
-    @Then("should follow the schema for photos")
-    public void validatePhotosSchema() {
-        then().assertThat()
-                .body(matchesJsonSchemaInClasspath("jsonSchema/photosSchema.json"));
-    }
-
-    @Then("should follow the schema for todos")
-    public void validateTodosSchema() {
-        then().assertThat()
-                .body(matchesJsonSchemaInClasspath("jsonSchema/todosSchema.json"));
-    }
-
-    @Then("should follow the schema for users")
-    public void validateUsersSchema() {
-        then().assertThat()
-                .body(matchesJsonSchemaInClasspath("jsonSchema/usersSchema.json"));
-    }
-
 }
