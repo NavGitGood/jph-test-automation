@@ -21,3 +21,8 @@
 4. After execution is complete, click on `test` and then on `ARTIFACTS` button
 5. Search for `index.html` and click on it to view the test report
 
+## Few notes ##
+1. Tests would run on each push (on the branch where push is made)
+2. Tests would run on the main branch whenever a pr is merged
+
+
