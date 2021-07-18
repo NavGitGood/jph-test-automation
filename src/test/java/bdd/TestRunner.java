@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
         plugin = {"pretty"},
         features = "classpath:features",
         glue = "bdd.step_definitions",
-        tags = "@positive"
+        tags = "not @smoke"
 )
 public class TestRunner {
 
