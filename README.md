@@ -1,5 +1,8 @@
 # JPH-Test-Automation #
 
+[GitHub](https://github.com/NavGitGood/jph-test-automation)
+[CircleCI](https://app.circleci.com/pipelines/github/NavGitGood/jph-test-automation)
+
 ## API Test Automation framework with following features ##
 1. Use of Serenity BDD with Cucumber
 2. Test Automation of [JPH API](https://jsonplaceholder.typicode.com/) using SerenityAssured (RestAssured)
